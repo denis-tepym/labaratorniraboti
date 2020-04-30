@@ -14,6 +14,14 @@ struct TreeElement
 		left = NULL;
 	}
 };
+struct sps {
+	int value;
+	sps* pointer;
+	sps() {
+		value = 0;
+		pointer = NULL;
+	}
+};
 
 void Input(TreeElement*& el, int v)
 {
@@ -39,6 +47,35 @@ void Output(TreeElement* el)
 		cout << el->value << " ";
 		Output(el->right);
 	}
+}
+void spos(sps*& head, TreeElement* el, sps*& p)
+{
+	if (el != NULL)
+	{
+		spos(head, el->left, p);
+		sps* p1 = new sps;
+		p1->value = el->value;
+		if (p == NULL)
+		{
+			head = p1;
+			p = p1;
+		}
+		else
+		{
+			p->pointer = p1;
+			p = p1;
+		}
+		spos(head, el->right, p);
+	}
+}
+
+void Out(sps* l) {
+	cout << "Список: ";
+	while (l != NULL) {
+		cout << l->value << " ";
+		l = l->pointer;
+	}
+	cout << endl;
 }
 void Detach(TreeElement* root, TreeElement* el)
 {
@@ -82,6 +119,8 @@ void Remove(TreeElement* el)
 }
 int main() {
 	setlocale(LC_ALL, "Russian");
+	sps* first = NULL;
+	sps* second = NULL;
 	TreeElement* root = NULL;
 	int a, b ;
 	cout << "Количество элементов в дереве:  ";
@@ -93,6 +132,8 @@ int main() {
 	}
 	Output(root);
 	cout << endl;
+	spos(first, root, second);
+	Out(first);
 	int z;
 	cout << "Введите поддерево, которое хотите удалить:  ";
 	cin >> z;
